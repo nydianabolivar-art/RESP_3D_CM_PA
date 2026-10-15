@@ -1,0 +1,1122 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RESPONDE 3D · Herramienta de apoyo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&display=swap">
+<style>
+/* RESPONDE 3D - estilos (tema claro) */
+:root {
+  --bg: #f2f5f7;
+  --card: #ffffff;
+  --soft: #f6f9fa;
+  --text: #1d2b34;
+  --muted: #5f6f7a;
+  --border: #dce4e9;
+  --primary: #12707b;
+  --primary-dark: #0b4d55;
+  --primary-light: #e1f1f2;
+  --orange: #ee6a32;
+  --blue: #2a78d6;
+  --ok: #18884a; --ok-bg: #e4f5ea;
+  --warn: #9a6400; --warn-bg: #fff3d6;
+  --err: #b42828; --err-bg: #fde8e8;
+  --mesh: #3d8f98;
+  --mesh-2: #ee6a32;
+  --head: "Poppins", "Segoe UI", Roboto, Arial, sans-serif;
+  --body: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: Consolas, "Roboto Mono", "Courier New", monospace;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { margin: 0; }
+body { background: var(--bg); color: var(--text); font-family: var(--body); font-size: 14px; line-height: 1.5; }
+h1, h2, h3 { font-family: var(--head); margin: 0; font-weight: 600; }
+p { margin: 0; }
+.num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+i.v { font-family: "Cambria Math", Cambria, "Times New Roman", serif; font-style: italic; font-size: 1.08em; }
+svg.ic { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+
+/* encabezado */
+header.top { background: linear-gradient(100deg, var(--primary-dark), #168592); color: #fff; padding: 18px 20px 0; }
+.top-in { max-width: 1400px; margin: 0 auto; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; }
+.logo { width: 46px; height: 46px; border-radius: 12px; background: rgba(255, 255, 255, .14); display: grid; place-items: center; flex: none; }
+.logo svg { width: 28px; height: 28px; stroke: #fff; fill: none; stroke-width: 1.6; }
+.top h1 { font-size: 26px; letter-spacing: .5px; line-height: 1.1; }
+.top h1 b { color: #ffc49e; font-weight: 700; }
+.top .sub { font-size: 13.5px; opacity: .88; }
+.team { margin-left: auto; background: rgba(255, 255, 255, .14); border-radius: 999px; padding: 5px 14px; font-size: 13px; }
+.tabs { max-width: 1400px; margin: 14px auto 0; display: flex; gap: 4px; overflow-x: auto; }
+.tab { background: transparent; border: 0; color: rgba(255, 255, 255, .82); font: 600 14px var(--head); padding: 10px 16px; border-radius: 10px 10px 0 0; cursor: pointer; white-space: nowrap; display: inline-flex; gap: 8px; align-items: center; }
+.tab:hover { color: #fff; background: rgba(255, 255, 255, .08); }
+.tab.on { background: var(--bg); color: var(--primary-dark); }
+.notice { max-width: 1400px; margin: 14px auto 0; padding: 0 20px; }
+.notice div { display: flex; gap: 8px; align-items: center; background: var(--warn-bg); color: var(--warn); border-radius: 10px; padding: 8px 12px; font-size: 13px; }
+
+main { max-width: 1400px; margin: 0 auto; padding: 16px 20px 40px; }
+@media (max-width: 520px) { main, .notice { padding-left: 16px; padding-right: 16px; } header.top { padding-left: 16px; padding-right: 16px; } .team { margin-left: 0; } }
+
+/* tarjetas */
+.card { background: var(--card); border-radius: 14px; box-shadow: 0 1px 3px rgba(20, 40, 50, .08), 0 4px 14px rgba(20, 40, 50, .05); min-width: 0; }
+.card-h { display: flex; align-items: center; gap: 10px; padding: 14px 16px 10px; flex-wrap: wrap; }
+.card-h .badge-n { width: 26px; height: 26px; border-radius: 50%; background: var(--primary); color: #fff; display: grid; place-items: center; font: 600 13px var(--head); flex: none; }
+.card-h .ico { width: 30px; height: 30px; border-radius: 8px; background: var(--primary-light); color: var(--primary); display: grid; place-items: center; flex: none; }
+.card-h h2 { font-size: 16px; }
+.card-h .grow { flex: 1 1 160px; min-width: 0; }
+.card-h small { display: block; color: var(--muted); font-size: 12.5px; }
+.card-b { padding: 4px 16px 16px; min-width: 0; }
+.grid { display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+.col { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.sticky { position: sticky; top: 12px; }
+.row2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 16px; }
+@media (max-width: 1050px) { .grid, .row2 { grid-template-columns: 1fr; } .sticky { position: static; } }
+
+/* zonas */
+.zones { display: flex; flex-wrap: wrap; gap: 8px; }
+.zone { border: 2px solid var(--border); background: #fff; color: var(--text); border-radius: 999px; padding: 7px 16px; font: 600 13.5px var(--head); cursor: pointer; display: inline-flex; gap: 8px; align-items: center; }
+.zone:hover { border-color: var(--primary); color: var(--primary); }
+.zone.on { background: var(--primary); border-color: var(--primary); color: #fff; }
+.zone .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; opacity: .55; }
+.zinfo { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 10px; font-size: 13px; color: var(--muted); }
+.zinfo b { color: var(--text); font-weight: 600; }
+
+/* controles */
+.btn { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--border); background: #fff; color: var(--text); padding: 7px 12px; border-radius: 9px; font: 600 13px var(--body); cursor: pointer; white-space: nowrap; }
+.btn:hover { border-color: var(--primary); color: var(--primary); }
+.btn.pri { background: var(--primary); border-color: var(--primary); color: #fff; }
+.btn.pri:hover { background: var(--primary-dark); color: #fff; }
+.btn.sm { padding: 5px 9px; font-size: 12.5px; }
+.btn.link { border: 0; background: none; color: var(--primary); padding: 4px 6px; }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.btns { display: flex; gap: 6px; flex-wrap: wrap; }
+input[type=number], input[type=text], input[type=url], select, textarea { font: 13px var(--body); color: var(--text); background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 6px 8px; width: 100%; min-width: 0; }
+input[type=number] { font-family: var(--mono); text-align: right; }
+input:focus, select:focus, textarea:focus { outline: 2px solid var(--primary-light); border-color: var(--primary); }
+input.out { border-color: #e2a400; background: var(--warn-bg); }
+input.bad { border-color: var(--err); background: var(--err-bg); }
+input[type=range] { width: 100%; accent-color: var(--primary); }
+textarea { font-family: var(--mono); min-height: 80px; resize: vertical; }
+label.ck { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); cursor: pointer; }
+label.ck input { accent-color: var(--primary); width: 15px; height: 15px; }
+.fields { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px 12px; align-items: end; }
+.f { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.f > span { font-size: 12px; color: var(--muted); }
+.seg { display: inline-flex; background: var(--soft); border: 1px solid var(--border); border-radius: 9px; padding: 2px; flex-wrap: wrap; }
+.seg button { border: 0; background: none; padding: 5px 11px; border-radius: 7px; font: 600 12.5px var(--body); color: var(--muted); cursor: pointer; }
+.seg button.on { background: #fff; color: var(--primary-dark); box-shadow: 0 1px 2px rgba(0, 0, 0, .12); }
+
+/* parámetros */
+.prm { display: grid; grid-template-columns: 130px minmax(0, 1fr) 104px; gap: 4px 12px; align-items: center; padding: 8px 0; border-bottom: 1px solid #edf1f4; }
+.prm:last-child { border-bottom: 0; }
+.prm .nm { line-height: 1.2; }
+.prm .nm i.v { font-size: 17px; }
+.prm .nm span { display: block; font-size: 12px; color: var(--muted); }
+.prm .val { display: flex; gap: 4px; align-items: center; }
+.prm .val small { color: var(--muted); font-size: 12px; min-width: 20px; }
+.prm .meta { grid-column: 2 / 4; font-size: 12px; color: var(--muted); display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.prm .rng { display: none; gap: 4px; align-items: center; }
+.ranges .prm .rng { display: inline-flex; }
+.prm .rng input { width: 70px; padding: 2px 5px; font-size: 12px; }
+@media (max-width: 560px) { .prm { grid-template-columns: minmax(0, 1fr) 104px; } .prm .nm { grid-column: 1 / 3; } .prm .meta { grid-column: 1 / 3; } }
+
+/* guía de medidas */
+.guide { background: var(--soft); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; }
+.guide h3 { font-size: 15px; margin-bottom: 8px; }
+.guide-in { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 14px; align-items: start; }
+@media (max-width: 560px) { .guide-in { grid-template-columns: 1fr; } }
+.guide-fig svg { width: 100%; height: auto; display: block; background: #fff; border: 1px solid var(--border); border-radius: 10px; }
+.guide-fig text { font: 11px var(--body); fill: #33434d; }
+.guide-txt { display: flex; flex-direction: column; gap: 8px; font-size: 13px; color: #33434d; }
+.guide-txt div { display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 6px; align-items: start; }
+.guide-txt p { margin: 0; }
+.nb { display: inline-grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: #10313a; color: #fff; font: 700 11.5px var(--body); flex: none; }
+.mform { display: flex; flex-direction: column; gap: 14px; margin-top: 14px; }
+.mf > label { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 14px; margin-bottom: 6px; }
+.mf > label small { font-weight: 400; color: var(--muted); }
+.mf > input { max-width: 100%; padding: 9px 10px; font-size: 14px; text-align: left; }
+.help { font-size: 12px; color: var(--muted); margin-top: 4px; }
+.trio { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.trio input { padding: 8px 10px; font-size: 14px; text-align: left; }
+.trio .f > span { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* tablas */
+.tw { overflow-x: auto; max-width: 100%; }
+table { border-collapse: collapse; width: 100%; font-size: 13px; }
+th { text-align: right; font-weight: 600; font-size: 12.5px; color: var(--muted); padding: 6px; border-bottom: 2px solid var(--border); white-space: nowrap; background: var(--soft); }
+td { padding: 4px 6px; border-bottom: 1px solid #edf1f4; text-align: right; white-space: nowrap; font-family: var(--mono); font-variant-numeric: tabular-nums; }
+th.l, td.l { text-align: left; }
+td.t { font-family: var(--body); white-space: normal; min-width: 150px; }
+td.c { color: var(--primary); font-weight: 600; }
+td input[type=number] { width: 72px; padding: 3px 5px; }
+td input[type=text] { min-width: 180px; padding: 3px 5px; }
+
+/* mensajes */
+.msg { display: flex; gap: 8px; align-items: flex-start; border-radius: 10px; padding: 8px 12px; font-size: 13px; margin-bottom: 10px; }
+.msg svg { margin-top: 1px; }
+.msg.warn { background: var(--warn-bg); color: var(--warn); }
+.msg.err { background: var(--err-bg); color: var(--err); }
+.msg.info { background: var(--primary-light); color: var(--primary-dark); }
+.msg ul { margin: 2px 0 0; padding-left: 18px; }
+.pill { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; border-radius: 999px; padding: 2px 9px; }
+.pill.ok { background: var(--ok-bg); color: var(--ok); }
+.pill.warn { background: var(--warn-bg); color: var(--warn); }
+.pill.err { background: var(--err-bg); color: var(--err); }
+.pill.gray { background: var(--soft); color: var(--muted); border: 1px solid var(--border); }
+.pill svg { width: 13px; height: 13px; stroke-width: 2.4; }
+.note { font-size: 12.5px; color: var(--muted); }
+
+/* visor */
+.vtools { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; padding: 0 16px 10px; align-items: center; }
+.viewer { position: relative; aspect-ratio: 4 / 3.2; max-width: 100%; background: radial-gradient(110% 85% at 50% 10%, #ffffff 0%, #e9eff2 100%); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); overflow: hidden; }
+.viewer canvas { display: block; width: 100%; height: 100%; cursor: grab; touch-action: none; }
+.viewer .vmsg { position: absolute; inset: 0; display: grid; place-items: center; padding: 24px; text-align: center; color: var(--muted); }
+.viewer .leg { position: absolute; left: 10px; bottom: 10px; display: flex; gap: 10px; flex-wrap: wrap; font-size: 11.5px; background: rgba(255, 255, 255, .85); padding: 4px 8px; border-radius: 6px; color: var(--muted); }
+.viewer .leg i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 4px; vertical-align: -1px; }
+.viewer .hint { position: absolute; right: 10px; top: 10px; font-size: 11.5px; color: var(--muted); background: rgba(255, 255, 255, .85); padding: 3px 8px; border-radius: 6px; }
+.dims { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; padding: 10px 16px 14px; font-size: 13px; color: var(--muted); }
+
+/* material */
+.tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+@media (max-width: 600px) { .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.tile { background: var(--soft); border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px; min-width: 0; }
+.tile .k { font-size: 12px; color: var(--muted); display: flex; gap: 6px; align-items: center; }
+.tile .k svg { color: var(--primary); width: 16px; height: 16px; }
+.tile .val { font: 600 22px var(--head); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tile .val small { font: 500 12px var(--body); color: var(--muted); margin-left: 3px; }
+.tile.main { background: var(--primary); border-color: var(--primary); color: #fff; }
+.tile.main .k, .tile.main .k svg, .tile.main .val small { color: rgba(255, 255, 255, .85); }
+.det { margin-top: 12px; }
+.det td:first-child { font-family: var(--body); text-align: left; color: var(--muted); }
+.save-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 12px; }
+
+/* gráficas */
+.chart svg { width: 100%; height: auto; display: block; }
+.chart text { fill: var(--muted); font: 11px var(--mono); }
+.legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12.5px; color: var(--muted); margin-bottom: 4px; }
+.legend i { display: inline-block; width: 14px; height: 3px; border-radius: 2px; vertical-align: middle; margin-right: 5px; }
+.bars { display: flex; flex-direction: column; gap: 8px; }
+.bar { display: grid; grid-template-columns: 170px minmax(0, 1fr) 76px; gap: 10px; align-items: center; font-size: 13px; }
+.bar .tr { height: 14px; background: var(--soft); border-radius: 4px; position: relative; }
+.bar .fl { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 0 4px 4px 0; background: var(--blue); }
+.bar .fl.neg { background: var(--orange); }
+.bar .vv { text-align: right; font-family: var(--mono); }
+.tip { position: absolute; pointer-events: none; background: #1d2b34; color: #fff; font: 12px var(--mono); padding: 5px 8px; border-radius: 6px; transform: translate(-50%, calc(-100% - 8px)); white-space: nowrap; z-index: 5; }
+
+/* configuraciones */
+.cfgs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 950px) { .cfgs { grid-template-columns: 1fr; } }
+.cfg-top { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-bottom: 1px solid #edf1f4; }
+.letter { width: 34px; height: 34px; border-radius: 10px; background: var(--primary); color: #fff; display: grid; place-items: center; font: 700 17px var(--head); flex: none; }
+.cfg-top input { border-color: transparent; font: 600 14px var(--head); }
+.cfg-top input:hover { border-color: var(--border); }
+.mini { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 14px; padding: 10px 14px; font-size: 12.5px; }
+.mini div { display: flex; justify-content: space-between; border-bottom: 1px dotted var(--border); padding: 2px 0; gap: 6px; }
+.mini span:first-child { color: var(--muted); }
+.mini span:last-child { font-family: var(--mono); }
+.cfg-f { display: flex; gap: 6px; flex-wrap: wrap; padding: 10px 14px; border-top: 1px solid #edf1f4; }
+.cfg.empty .empty-b { padding: 24px 14px; text-align: center; color: var(--muted); font-size: 13px; }
+
+/* cómo funciona */
+.doc { max-width: 900px; }
+.doc h3 { font-size: 15px; margin: 18px 0 6px; color: var(--primary-dark); }
+.doc p, .doc li { font-size: 14px; color: #33434d; }
+.doc ol, .doc ul { padding-left: 20px; margin: 6px 0; }
+.eq { font-family: "Cambria Math", Cambria, "Times New Roman", serif; font-style: italic; font-size: 16px; background: var(--soft); border-left: 3px solid var(--primary); padding: 8px 12px; border-radius: 0 8px 8px 0; margin: 6px 0; overflow-x: auto; white-space: nowrap; }
+.kv { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 4px 14px; font-size: 13px; }
+.kv dt { color: var(--muted); }
+.kv dd { margin: 0; font-family: var(--mono); overflow-wrap: anywhere; }
+
+.toast { position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%); background: #1d2b34; color: #fff; padding: 10px 14px; border-radius: 10px; font-size: 13px; z-index: 50; max-width: calc(100vw - 32px); box-shadow: 0 6px 20px rgba(0, 0, 0, .2); }
+footer { max-width: 1400px; margin: 0 auto; padding: 0 20px 30px; font-size: 12.5px; color: var(--muted); }
+
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="cube" viewBox="0 0 24 24"><path d="M12 2.8 20 7v10l-8 4.2L4 17V7z"/><path d="M4 7l8 4.2L20 7M12 11.2V21"/></symbol>
+  <symbol id="table" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M3 14h18M9 9v11M15 9v11"/></symbol>
+  <symbol id="sliders" viewBox="0 0 24 24"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></symbol>
+  <symbol id="holes" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><rect x="7" y="7" width="3.5" height="3.5" rx=".8"/><rect x="13.5" y="7" width="3.5" height="3.5" rx=".8"/><rect x="7" y="13.5" width="3.5" height="3.5" rx=".8"/><rect x="13.5" y="13.5" width="3.5" height="3.5" rx=".8"/></symbol>
+  <symbol id="plate" viewBox="0 0 24 24"><path d="M4 16 9 6h7l4 10z"/><path d="M4 16v2h16v-2"/></symbol>
+  <symbol id="spool" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/><path d="M12 3v6M12 15v6"/></symbol>
+  <symbol id="scale" viewBox="0 0 24 24"><path d="M12 4v16M6 20h12M5 8h14"/><path d="M5 8l-3 6a3 3 0 0 0 6 0zM19 8l-3 6a3 3 0 0 0 6 0z"/></symbol>
+  <symbol id="ruler" viewBox="0 0 24 24"><path d="M3 16.5 16.5 3 21 7.5 7.5 21z"/><path d="M7 13l2 2M10 10l2 2M13 7l2 2"/></symbol>
+  <symbol id="coin" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M14.8 9.2c-.5-1-1.6-1.6-2.8-1.6-1.6 0-2.8.9-2.8 2.1 0 2.9 5.8 1.6 5.8 4.5 0 1.2-1.3 2.2-3 2.2-1.3 0-2.5-.6-3-1.7M12 6v1.6M12 16.4V18"/></symbol>
+  <symbol id="printer" viewBox="0 0 24 24"><path d="M4 4h16v13H4z"/><path d="M4 8h16M10 8v4l2 2 2-2V8"/><path d="M7 17v3h10v-3"/></symbol>
+  <symbol id="chart" viewBox="0 0 24 24"><path d="M3 20h18"/><path d="M4 16c3-7 6-9 9-6s5 1 7-5"/></symbol>
+  <symbol id="bars" viewBox="0 0 24 24"><path d="M4 20h16M6 16V9M11 16V5M16 16v-5"/></symbol>
+  <symbol id="book" viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5M8 7h7"/></symbol>
+  <symbol id="link" viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></symbol>
+  <symbol id="alert" viewBox="0 0 24 24"><path d="M12 3.5 2.8 19.5h18.4z"/><path d="M12 10v4.5M12 17.2v.3"/></symbol>
+  <symbol id="check" viewBox="0 0 24 24"><path d="M5 12.5 10 17 19 7"/></symbol>
+  <symbol id="x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+  <symbol id="info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.6v.3"/></symbol>
+  <symbol id="plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="trash" viewBox="0 0 24 24"><path d="M4 7h16M10 7V4h4v3M6 7l1 13h10l1-13"/></symbol>
+  <symbol id="save" viewBox="0 0 24 24"><path d="M5 4h11l3 3v13H5z"/><path d="M8 4v5h7V4M8 20v-6h8v6"/></symbol>
+  <symbol id="download" viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5"/><path d="M4 19h16"/></symbol>
+  <symbol id="upload" viewBox="0 0 24 24"><path d="M12 15V4M7 9l5-5 5 5"/><path d="M4 19h16"/></symbol>
+  <symbol id="paste" viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="16" rx="2"/><path d="M9 5V3h6v2M9 11h6M9 15h4"/></symbol>
+  <symbol id="refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 0 0-14.6-4.5M4 4v4h4"/><path d="M4 13a8 8 0 0 0 14.6 4.5M20 20v-4h-4"/></symbol>
+  <symbol id="body" viewBox="0 0 24 24"><circle cx="12" cy="4.5" r="2"/><path d="M8 9h8M12 9v6M12 15l-3 6M12 15l3 6M8 9l-2 5M16 9l2 5"/></symbol>
+</svg>
+
+<header class="top">
+  <div class="top-in">
+    <div class="logo"><svg><use href="#cube"/></svg></div>
+    <div>
+      <h1>RESPONDE <b>3D</b></h1>
+      <div class="sub">Herramienta de apoyo · Cálculo Multivariado · modelo de férulas a partir de diseños abiertos</div>
+    </div>
+    <div class="team" id="team-chip">Equipo: sin nombre</div>
+  </div>
+</header>
+<div class="notice"><div><svg class="ic"><use href="#alert"/></svg><span><b>Prototipo académico.</b> Se revisa solo sobre maniquí o modelo digital; no se coloca en personas ni se usa para atender lesiones.</span></div></div>
+
+<main>
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-h"><span class="badge-n">1</span><div class="grow"><h2>Zona de la férula</h2><small>Cada zona guarda sus propias medidas y parámetros</small></div></div>
+    <div class="card-b">
+      <div class="zones" id="zones"></div>
+      <div class="zinfo" id="zinfo"></div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="col">
+      <div class="card">
+        <div class="card-h"><span class="badge-n">2</span><div class="grow"><h2>Medidas del tramo</h2><small>Tome las medidas sobre el maniquí o el modelo digital, en milímetros</small></div></div>
+        <div class="card-b">
+          <div class="guide">
+            <h3>¿Dónde tomar cada medida?</h3>
+            <div class="guide-in">
+              <div class="guide-fig" id="guide-fig"></div>
+              <div class="guide-txt" id="guide-txt"></div>
+            </div>
+          </div>
+          <div id="meas-msg" style="margin-top:12px"></div>
+          <div class="mform">
+            <div class="mf">
+              <label for="ms-L"><span class="nb">1</span>Largo del tramo <small>(mm)</small></label>
+              <input type="number" id="ms-L" min="1" step="1">
+              <p class="help" id="help-L">Mida a lo largo del segmento, desde un extremo hasta el otro.</p>
+            </div>
+            <div class="mf">
+              <label><span class="nb">2</span>Ancho <small>(mm)</small></label>
+              <div class="trio">
+                <label class="f"><span id="lw0">Inicio</span><input type="number" id="ms-W0" min="1" step="0.5"></label>
+                <label class="f"><span id="lw1">Mitad</span><input type="number" id="ms-W1" min="1" step="0.5"></label>
+                <label class="f"><span id="lw2">Final</span><input type="number" id="ms-W2" min="1" step="0.5"></label>
+              </div>
+              <p class="help">De lado a lado, en línea recta. No mida alrededor del segmento.</p>
+            </div>
+            <div class="mf">
+              <label><span class="nb">3</span>Grosor <small>(mm)</small></label>
+              <div class="trio">
+                <label class="f"><span id="lt0">Inicio</span><input type="number" id="ms-T0" min="1" step="0.5"></label>
+                <label class="f"><span id="lt1">Mitad</span><input type="number" id="ms-T1" min="1" step="0.5"></label>
+                <label class="f"><span id="lt2">Final</span><input type="number" id="ms-T2" min="1" step="0.5"></label>
+              </div>
+              <p class="help">De adelante hacia atrás, en línea recta, en los mismos tres puntos.</p>
+            </div>
+            <div class="mf" id="foot-fields" hidden>
+              <label><span class="nb">4</span>Pie <small>(mm)</small></label>
+              <div class="trio">
+                <label class="f"><span>Largo del pie</span><input type="number" id="pl-l" min="1" step="1"></label>
+                <label class="f"><span>Ancho del talón</span><input type="number" id="pl-w1" min="1" step="0.5"></label>
+                <label class="f"><span>Ancho del antepié</span><input type="number" id="pl-w2" min="1" step="0.5"></label>
+              </div>
+              <p class="help">Del talón a la punta, y de lado a lado en el talón y en la parte más ancha del pie.</p>
+            </div>
+            <div><button class="btn" id="b-reset" type="button"><svg class="ic"><use href="#refresh"/></svg>Restablecer ejemplo</button></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" id="card-params">
+        <div class="card-h"><span class="badge-n">3</span><div class="grow"><h2>Parámetros de la configuración</h2><small>Mueva los controles y observe el modelo 3D y el material</small></div>
+          <label class="ck"><input type="checkbox" id="c-ranges"> Editar rangos</label></div>
+        <div class="card-b" id="prm-list"></div>
+      </div>
+
+      <div class="card" id="card-perf">
+        <div class="card-h"><span class="badge-n">4</span><div class="grow"><h2>Perforaciones</h2><small>Ventanas de la zona tubular; q es la fracción de área retirada</small></div></div>
+        <div class="card-b">
+          <div class="seg" id="seg-q"><button type="button" data-v="perf">Calcular q con las ventanas</button><button type="button" data-v="manual">Escribir q medido en el CAD</button></div>
+          <div id="perf-box" style="margin-top:12px">
+            <label class="ck" style="margin-bottom:10px"><input type="checkbox" id="c-perf"> Incluir ventanas</label>
+            <div class="fields">
+              <label class="f"><span>Filas a lo largo</span><input type="number" id="pf-nf" min="1" step="1"></label>
+              <label class="f"><span>Columnas alrededor</span><input type="number" id="pf-nc" min="1" step="1"></label>
+              <label class="f"><span>Largo de ventana (mm)</span><input type="number" id="pf-sz" min="1" step="0.5"></label>
+              <label class="f"><span>Ancho de ventana (°)</span><input type="number" id="pf-dth" min="1" step="0.5"></label>
+              <label class="f"><span>Margen en extremos (mm)</span><input type="number" id="pf-mz" min="0" step="0.5"></label>
+              <label class="f"><span>Margen lateral (°)</span><input type="number" id="pf-mth" min="0" step="0.5"></label>
+            </div>
+            <p class="note" id="perf-info" style="margin-top:8px"></p>
+          </div>
+          <div id="qman-box" hidden style="margin-top:12px"><div id="prm-q"></div></div>
+          <div id="perf-msg" style="margin-top:8px"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-h"><span class="badge-n">5</span><div class="grow"><h2>Material e impresora</h2><small>Reemplace los valores de referencia por la ficha técnica y el equipo del laboratorio</small></div></div>
+        <div class="card-b">
+          <div class="fields">
+            <label class="f"><span>Material</span><select id="m-mat"><option value="PLA">PLA</option><option value="PETG">PETG</option><option value="ABS">ABS</option><option value="TPU">TPU 95A</option><option value="Otro">Otro</option></select></label>
+            <label class="f"><span>Densidad ρ (g/cm³)</span><input type="number" id="m-rho" step="0.01" min="0.5"></label>
+            <label class="f"><span>Diámetro del filamento (mm)</span><input type="number" id="m-d" step="0.05" min="1"></label>
+            <label class="f"><span>Peso del rollo (g)</span><input type="number" id="m-spool" step="50" min="100"></label>
+            <label class="f"><span>Precio del rollo por kg (COP)</span><input type="number" id="m-price" step="1000" min="0"></label>
+            <label class="f" style="grid-column:span 2"><span>Cama X × Y × Z (mm)</span><span style="display:flex;gap:4px"><input type="number" id="m-bx" min="50" aria-label="Cama X"><input type="number" id="m-by" min="50" aria-label="Cama Y"><input type="number" id="m-bz" min="50" aria-label="Cama Z"></span></label>
+          </div>
+          <p class="note" id="mat-note" style="margin-top:8px"></p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-h"><span class="ico"><svg class="ic"><use href="#link"/></svg></span><div class="grow"><h2>Diseño abierto de partida</h2><small>La geometría se compara siempre con este archivo CAD</small></div></div>
+        <div class="card-b">
+          <div class="fields" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr))">
+            <label class="f"><span>Equipo</span><input type="text" id="s-team"></label>
+            <label class="f"><span>Nombre del diseño o archivo</span><input type="text" id="s-nombre"></label>
+            <label class="f"><span>Autor o repositorio</span><input type="text" id="s-autor"></label>
+            <label class="f"><span>Enlace</span><input type="url" id="s-enlace"></label>
+            <label class="f"><span>Licencia o condiciones de uso</span><input type="text" id="s-licencia"></label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col sticky">
+      <div class="card">
+        <div class="card-h"><span class="ico"><svg class="ic"><use href="#cube"/></svg></span><div class="grow"><h2>Modelo 3D</h2><small id="v-sub">Superficie r(u, θ) con espesor e</small></div></div>
+        <div class="vtools">
+          <div class="seg" id="seg-view"><button type="button" data-v="iso" class="on">3D</button><button type="button" data-v="top">Desde arriba</button><button type="button" data-v="side">De lado</button></div>
+          <div class="btns" style="gap:12px">
+            <label class="ck"><input type="checkbox" id="v-ghost" checked> Maniquí</label>
+            <label class="ck"><input type="checkbox" id="v-sec" checked> Secciones</label>
+            <label class="ck"><input type="checkbox" id="v-wire"> Superficie r(u,θ)</label>
+            <label class="ck"><input type="checkbox" id="v-axes" checked> Ejes</label>
+            <label class="ck"><input type="checkbox" id="v-rot"> Girar</label>
+          </div>
+        </div>
+        <div class="viewer" id="viewer">
+          <div class="vmsg" id="viewer-msg">Cargando el modelo 3D…</div>
+          <div class="hint" id="vhint" hidden>Arrastre para girar · rueda para acercar</div>
+          <div class="leg" id="vleg" hidden><span><i style="background:var(--mesh)"></i>férula</span><span><i style="background:#b4bec6"></i>maniquí aprox.</span><span><i style="background:var(--mesh-2)"></i>secciones medidas</span><span><i style="background:#d03b3b"></i>x</span><span><i style="background:#18884a"></i>y</span><span><i style="background:#2a78d6"></i>z</span></div>
+        </div>
+        <div class="dims" id="dims"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-h"><span class="ico"><svg class="ic"><use href="#scale"/></svg></span><div class="grow"><h2>Cantidad de material</h2><small id="mat-sub">Configuración actual</small></div></div>
+        <div class="card-b">
+          <div class="tiles">
+            <div class="tile main"><div class="k"><svg class="ic"><use href="#scale"/></svg>Masa</div><div class="val" id="t-m">—</div></div>
+            <div class="tile"><div class="k"><svg class="ic"><use href="#ruler"/></svg>Filamento</div><div class="val" id="t-len">—</div></div>
+            <div class="tile"><div class="k"><svg class="ic"><use href="#spool"/></svg>Del rollo</div><div class="val" id="t-spool">—</div></div>
+            <div class="tile"><div class="k"><svg class="ic"><use href="#coin"/></svg>Costo</div><div class="val" id="t-cost">—</div></div>
+          </div>
+          <div class="tw det"><table id="det-t"><tbody></tbody></table></div>
+          <div class="save-row"><button class="btn sm" id="x-xlsx" type="button"><svg class="ic"><use href="#download"/></svg>Descargar resultados (Excel)</button></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-h"><span class="ico"><svg class="ic"><use href="#bars"/></svg></span><div class="grow"><h2>¿Qué variable pesa más?</h2><small>Cambio del volumen si cada variable aumenta 5 % y las demás no cambian</small></div></div>
+        <div class="card-b"><div class="bars" id="sens"></div><p class="note" style="margin-top:10px">q se mantiene fijo al variar las demás. Azul: el volumen aumenta; naranja: disminuye.</p></div>
+      </div>
+    </div>
+  </div>
+</main>
+<footer>RESPONDE 3D · Proyecto de Aula de Cálculo Multivariado · Las medidas iniciales de cada zona son un ejemplo sintético; reemplácelas por las del maniquí o del modelo digital.</footer>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+/* RESPONDE 3D · cálculos del modelo
+   Superficie: r(u,θ) = (p1·a0(u)·cosθ, p2·b0(u)·sinθ, L·u),  0 <= u <= 1,  -φ/2 <= θ <= φ/2
+   x: profundidad (la férula queda del lado +x), y: ancho, z: eje largo.
+   Área: A = ∫∫ |r_u × r_θ| dθ du  (regla de Simpson compuesta, por tramos entre secciones)
+   Volumen: V = e(1 - q)A + e·A_placa      Masa: m = ρV/1000      Unidades: mm, g/cm³ */
+(function (root) {
+  'use strict';
+  var DEG = Math.PI / 180;
+
+  /* Zonas. Medidas de ejemplo del maniquí (sintéticas, proporciones aproximadas; no son medidas de personas):
+     L: largo del tramo; W: ancho (de lado a lado) y T: grosor (de adelante hacia atrás) en inicio, mitad y final, en mm. */
+  var ZONES = {
+    brazo: { name: 'Brazo', pts: ['sobre el codo', 'brazo medio', 'cerca de la axila'], comp: 'Zona tubular', side: 'posterior',
+      L: 240, W: [78, 84, 92], T: [66, 76, 86], phi: 220, e: 3,
+      perf: { nf: 5, nc: 5, sz: 18, dthDeg: 16, mz: 16, mthDeg: 12 }, ghost: 40, view: [1.1, 0.7, 1.35] },
+    antebrazo: { name: 'Antebrazo y muñeca', pts: ['cerca del codo', 'antebrazo medio', 'muñeca'], comp: 'Zona tubular', side: 'palmar',
+      L: 220, W: [72, 68, 58], T: [62, 50, 38], phi: 190, e: 3,
+      perf: { nf: 6, nc: 4, sz: 16, dthDeg: 18, mz: 14, mthDeg: 14 }, ghost: 70, view: [1.1, 0.7, 1.35] },
+    mano: { name: 'Mano y muñeca', pts: ['antebrazo distal', 'muñeca', 'nudillos'], comp: 'Zona tubular + zona palmar', side: 'palmar',
+      L: 200, W: [66, 58, 84], T: [46, 38, 28], phi: 180, e: 3, split: { at: 1, names: ['Zona del antebrazo', 'Zona palmar'] },
+      perf: { nf: 4, nc: 4, sz: 16, dthDeg: 16, mz: 14, mthDeg: 14 }, ghost: 75, fingers: true, view: [-1.2, 0.6, 0.9] },
+    rodilla: { name: 'Rodilla', pts: ['pantorrilla', 'rodilla', 'muslo medio'], comp: 'Zona tubular', side: 'posterior',
+      L: 440, W: [92, 100, 142], T: [88, 78, 128], phi: 170, e: 3.5,
+      perf: { nf: 8, nc: 3, sz: 24, dthDeg: 24, mz: 20, mthDeg: 16 }, ghost: 50, view: [1.25, 0.55, 0.9] },
+    pierna: { name: 'Pierna', pts: ['sobre el tobillo', 'pantorrilla', 'bajo la rodilla'], comp: 'Zona tubular', side: 'posterior',
+      L: 300, W: [60, 96, 90], T: [54, 92, 88], phi: 200, e: 3,
+      perf: { nf: 6, nc: 4, sz: 20, dthDeg: 18, mz: 18, mthDeg: 14 }, ghost: 50, view: [1.1, 0.7, 1.35] },
+    tobillo: { name: 'Tobillo y pie', pts: ['talón', 'sobre el tobillo', 'pantorrilla baja'], comp: 'Zona tubular + placa plantar', side: 'posterior',
+      L: 250, W: [64, 62, 84], T: [70, 60, 82], phi: 190, e: 3, plate: { l: 240, w1: 64, w2: 96 },
+      perf: { nf: 4, nc: 3, sz: 22, dthDeg: 22, mz: 30, mthDeg: 18 }, ghost: 40, foot: true, view: [-1.0, 0.7, 1.15] }
+  };
+  function zoneDefaults(id) {
+    var z = ZONES[id];
+    var prm = { p1: 1, p2: 1, phiDeg: z.phi, e: z.e, qMode: 'perf', qManual: 0.15,
+      perf: { on: true, nf: z.perf.nf, nc: z.perf.nc, sz: z.perf.sz, dthDeg: z.perf.dthDeg, mz: z.perf.mz, mthDeg: z.perf.mthDeg },
+      plate: z.plate ? { l: z.plate.l, w1: z.plate.w1, w2: z.plate.w2 } : null };
+    return { meas: { L: z.L, W: z.W.slice(), T: z.T.slice() }, example: true, prm: prm,
+      ranges: { p1: [0.9, 1.15], p2: [0.9, 1.15], phiDeg: [120, 300], e: [1.5, 5], q: [0, 0.4] }, source: { nombre: '', autor: '', enlace: '', licencia: '' } };
+  }
+  /* secciones de la superficie media: la férula se apoya sobre el maniquí, por eso a = grosor/2 + e/2 y b = ancho/2 + e/2 */
+  function sectionsFrom(meas, e) {
+    return [0, 0.5, 1].map(function (f, i) {
+      var a = meas.T[i] / 2 + e / 2, b = meas.W[i] / 2 + e / 2;
+      return { z: meas.L * f, xmin: -a, xmax: a, ymin: -b, ymax: b };
+    });
+  }
+  function measErrors(meas) {
+    var e = [];
+    if (!(meas.L > 0)) e.push('El largo del tramo debe ser mayor que 0.');
+    ['inicio', 'mitad', 'final'].forEach(function (n, i) {
+      if (!(meas.W[i] > 0)) e.push('Falta el ancho en el ' + n + '.');
+      if (!(meas.T[i] > 0)) e.push('Falta el grosor en el ' + n + '.');
+    });
+    return e;
+  }
+
+  /* ---------- perfiles a0(u), b0(u) ---------- */
+  function toNum(v) { return (v === null || v === undefined || v === '') ? NaN : +v; }
+  function buildProfile(sections) {
+    var errors = [], rows = [], s = (sections || []).filter(Boolean);
+    if (s.length < 2) errors.push('Se necesitan al menos dos secciones.');
+    var z0 = s.length ? toNum(s[0].z) : 0, L0 = s.length ? toNum(s[s.length - 1].z) - z0 : NaN;
+    s.forEach(function (r, i) {
+      var zi = toNum(r.z), xmin = toNum(r.xmin), xmax = toNum(r.xmax), ymin = toNum(r.ymin), ymax = toNum(r.ymax);
+      var row = { i: i, z: zi, u: (zi - z0) / L0, xmin: xmin, xmax: xmax, ymin: ymin, ymax: ymax, a: (xmax - xmin) / 2, b: (ymax - ymin) / 2, lugar: r.lugar || '', ok: true };
+      if (![zi, xmin, xmax, ymin, ymax].every(isFinite)) { row.ok = false; errors.push('Sección ' + i + ': faltan medidas.'); }
+      else {
+        if (!(xmax > xmin)) { row.ok = false; errors.push('Sección ' + i + ': x máx debe ser mayor que x mín.'); }
+        if (!(ymax > ymin)) { row.ok = false; errors.push('Sección ' + i + ': y máx debe ser mayor que y mín.'); }
+      }
+      if (i > 0 && !(zi > toNum(s[i - 1].z))) { row.ok = false; errors.push('Sección ' + i + ': z debe ser mayor que en la sección anterior.'); }
+      rows.push(row);
+    });
+    return { ok: errors.length === 0, errors: errors, rows: rows, L0: L0, z0: z0,
+      knots: rows.map(function (r) { return r.u; }), a: rows.map(function (r) { return r.a; }), b: rows.map(function (r) { return r.b; }) };
+  }
+  function interp(kn, v, u) {
+    var n = kn.length;
+    if (u <= kn[0]) return v[0];
+    if (u >= kn[n - 1]) return v[n - 1];
+    var k = 0; while (k < n - 2 && u > kn[k + 1]) k++;
+    return v[k] + (v[k + 1] - v[k]) * (u - kn[k]) / (kn[k + 1] - kn[k]);
+  }
+  function dinterp(kn, v, u) { var h = 1e-6, u0 = Math.max(0, u - h), u1 = Math.min(1, u + h); return (interp(kn, v, u1) - interp(kn, v, u0)) / (u1 - u0); }
+
+  /* ---------- ventanas (perforaciones) en el dominio (u, θ) ---------- */
+  function perfLayout(p) {
+    var P = p.perf || {}, res = { on: !!P.on && p.qMode === 'perf', HU: [], HT: [], errors: [] };
+    if (!res.on) return res;
+    var L = p.L, phi = p.phiDeg, nf = Math.round(P.nf), nc = Math.round(P.nc);
+    if (!(nf >= 1 && nc >= 1)) res.errors.push('Filas y columnas deben ser al menos 1.');
+    if (!(P.sz > 0 && P.dthDeg > 0)) res.errors.push('El tamaño de la ventana debe ser positivo.');
+    if (!(P.mz >= 0 && 2 * P.mz < L)) res.errors.push('El margen en los extremos es demasiado grande.');
+    if (!(P.mthDeg >= 0 && 2 * P.mthDeg < phi)) res.errors.push('El margen lateral es demasiado grande.');
+    if (!res.errors.length) {
+      var Pz = (L - 2 * P.mz) / nf, Qt = (phi - 2 * P.mthDeg) / nc;
+      if (!(P.sz < Pz)) res.errors.push('Las ventanas se superponen a lo largo: reduzca el largo (máx. ' + Pz.toFixed(1) + ' mm).');
+      if (!(P.dthDeg < Qt)) res.errors.push('Las ventanas se superponen alrededor: reduzca el ancho (máx. ' + Qt.toFixed(1) + '°).');
+      res.Pz = Pz; res.Qt = Qt; res.bridgeZ = Pz - P.sz; res.bridgeT = Qt - P.dthDeg;
+    }
+    if (res.errors.length) { res.on = false; return res; }
+    for (var k = 0; k < nf; k++) { var zc = P.mz + (k + 0.5) * res.Pz; res.HU.push([(zc - P.sz / 2) / L, (zc + P.sz / 2) / L]); }
+    for (var j = 0; j < nc; j++) { var tc = -phi / 2 + P.mthDeg + (j + 0.5) * res.Qt; res.HT.push([tc - P.dthDeg / 2, tc + P.dthDeg / 2]); }
+    return res;
+  }
+
+  /* ---------- integral de superficie con Simpson ---------- */
+  function simpsonW(i, n) { return (i === 0 || i === n) ? 1 : (i % 2 ? 4 : 2); }
+  function areaRect(prof, p, u0, u1, t0, t1) {
+    if (!(u1 > u0) || !(t1 > t0)) return 0;
+    var cuts = [u0];
+    prof.knots.forEach(function (k) { if (k > u0 + 1e-12 && k < u1 - 1e-12) cuts.push(k); });
+    cuts.push(u1);
+    var nt = 2 * Math.max(4, Math.ceil((t1 - t0) / (4 * DEG))), ht = (t1 - t0) / nt, A = 0, L = p.L;
+    for (var c = 0; c < cuts.length - 1; c++) {
+      var ua = cuts[c], ub = cuts[c + 1], nu = 2 * Math.max(4, Math.ceil((ub - ua) * 40)), hu = (ub - ua) / nu;
+      var a0A = interp(prof.knots, prof.a, ua), b0A = interp(prof.knots, prof.b, ua);
+      var sa = (interp(prof.knots, prof.a, ub) - a0A) / (ub - ua), sb = (interp(prof.knots, prof.b, ub) - b0A) / (ub - ua);   // a0'(u), b0'(u) en el tramo
+      var da = p.p1 * sa, db = p.p2 * sb;
+      for (var i = 0; i <= nu; i++) {
+        var u = ua + i * hu, a = p.p1 * (a0A + sa * (u - ua)), b = p.p2 * (b0A + sb * (u - ua)), wu = simpsonW(i, nu) * hu / 3;
+        for (var j = 0; j <= nt; j++) {
+          var t = t0 + j * ht, cs = Math.cos(t), sn = Math.sin(t);
+          var cx = -L * b * cs, cy = -L * a * sn, cz = da * b * cs * cs + a * db * sn * sn;   // r_u × r_θ
+          A += wu * simpsonW(j, nt) * ht / 3 * Math.sqrt(cx * cx + cy * cy + cz * cz);
+        }
+      }
+    }
+    return A;
+  }
+  /* área de la placa plantar con forma de pie: semicírculo de talón + trapecio + semicírculo de antepié */
+  function plateArea(pl) {
+    var r1 = pl.w1 / 2, r2 = pl.w2 / 2, lt = pl.l - r1 - r2;
+    return { A: Math.PI * r1 * r1 / 2 + lt * (pl.w1 + pl.w2) / 2 + Math.PI * r2 * r2 / 2, lt: lt, ok: lt > 0 };
+  }
+
+  function evaluate(prof, p, mat, split) {
+    var ph = p.phiDeg * DEG, lay = perfLayout(p), bounds = [0, 1], names = ['Zona tubular'];
+    if (split && split.at > 0 && split.at < prof.knots.length - 1) { bounds = [0, prof.knots[split.at], 1]; names = split.names; }
+    var parts = [], At = 0, Ah = 0;
+    for (var k = 0; k < bounds.length - 1; k++) {
+      var u0 = bounds[k], u1 = bounds[k + 1], A = areaRect(prof, p, u0, u1, -ph / 2, ph / 2), H = 0;
+      if (lay.on) lay.HU.forEach(function (hu) { var a = Math.max(hu[0], u0), b = Math.min(hu[1], u1); if (b > a) lay.HT.forEach(function (ht) { H += areaRect(prof, p, a, b, ht[0] * DEG, ht[1] * DEG); }); });
+      parts.push({ name: names[k], A: A, Ah: H }); At += A; Ah += H;
+    }
+    var q = p.qMode === 'manual' ? Math.min(Math.max(+p.qManual || 0, 0), 0.95) : (lay.on ? Ah / At : 0);
+    parts.forEach(function (pt) { pt.q = p.qMode === 'manual' ? q : (pt.A > 0 ? pt.Ah / pt.A : 0); pt.V = p.e * (1 - pt.q) * pt.A; });
+    var pa = p.plate ? plateArea(p.plate) : { A: 0, ok: true };
+    var Vt = parts.reduce(function (s, x) { return s + x.V; }, 0), Vp = p.e * pa.A, V = Vt + Vp;
+    var out = { At: At, Ah: Ah, q: q, parts: parts, Ap: pa.A, plateOk: pa.ok, Vt: Vt, Vp: Vp, V: V, layout: lay };
+    if (mat) out.mat = material(V, mat);
+    return out;
+  }
+  function material(Vmm3, mat) {
+    var m = mat.rho * Vmm3 / 1000, r = mat.dfil / 2, len = Vmm3 / (Math.PI * r * r) / 1000;
+    return { m: m, len: len, spool: mat.spool > 0 ? m / mat.spool * 100 : NaN, cost: mat.price > 0 ? m * mat.price / 1000 : NaN };
+  }
+
+  /* ---------- geometría 3D ---------- */
+  function surfPoint(prof, p, u, tdeg, off) {
+    var a = p.p1 * interp(prof.knots, prof.a, u), b = p.p2 * interp(prof.knots, prof.b, u);
+    var da = p.p1 * dinterp(prof.knots, prof.a, u), db = p.p2 * dinterp(prof.knots, prof.b, u);
+    var t = tdeg * DEG, c = Math.cos(t), s = Math.sin(t), L = p.L;
+    var nx = L * b * c, ny = L * a * s, nz = -(da * b * c * c + a * db * s * s), nn = Math.sqrt(nx * nx + ny * ny + nz * nz) || 1;
+    return [a * c + off * nx / nn, b * s + off * ny / nn, L * u + off * nz / nn];
+  }
+  function sortUniq(arr, tol) { var a = arr.slice().sort(function (x, y) { return x - y; }), o = []; for (var i = 0; i < a.length; i++) if (i === 0 || a[i] - a[i - 1] > tol) o.push(a[i]); return o; }
+  function breaks(req, n, lo, hi, tol) {
+    var R = sortUniq(req.filter(function (x) { return x >= lo - tol && x <= hi + tol; }), tol), st = (hi - lo) / n, U = [];
+    for (var k = 0; k <= n; k++) { var x = lo + k * st, md = Infinity; R.forEach(function (r) { md = Math.min(md, Math.abs(x - r)); }); if (md > 0.3 * st) U.push(x); }
+    return sortUniq(R.concat(U), tol);
+  }
+  function tubeMesh(prof, p) {
+    var lay = perfLayout(p), phi = p.phiDeg, reqU = [0, 1].concat(prof.knots), reqT = [-phi / 2, phi / 2];
+    if (lay.on) { lay.HU.forEach(function (h) { reqU.push(h[0], h[1]); }); lay.HT.forEach(function (h) { reqT.push(h[0], h[1]); }); }
+    var ub = breaks(reqU, 64, 0, 1, 1e-9), tb = breaks(reqT, 90, -phi / 2, phi / 2, 1e-7), NU = ub.length, NT = tb.length, nn = NU * NT;
+    var pos = new Float32Array(nn * 6), off = [-p.e / 2, p.e / 2];
+    for (var s = 0; s < 2; s++) for (var i = 0; i < NU; i++) for (var j = 0; j < NT; j++) {
+      var q = surfPoint(prof, p, ub[i], tb[j], off[s]), k = 3 * (s * nn + i * NT + j); pos[k] = q[0]; pos[k + 1] = q[1]; pos[k + 2] = q[2];
+    }
+    function inAny(x, H) { for (var h = 0; h < H.length; h++) if (x > H[h][0] && x < H[h][1]) return true; return false; }
+    function S(i, j) { return i >= 0 && j >= 0 && i < NU - 1 && j < NT - 1 && !(lay.on && inAny((ub[i] + ub[i + 1]) / 2, lay.HU) && inAny((tb[j] + tb[j + 1]) / 2, lay.HT)); }
+    function I(i, j) { return i * NT + j; } function O(i, j) { return nn + i * NT + j; }
+    var F = []; function quad(a, b, c, d) { F.push(a, b, c, a, c, d); }
+    for (i = 0; i < NU - 1; i++) for (j = 0; j < NT - 1; j++) {
+      if (!S(i, j)) continue;
+      quad(O(i, j), O(i, j + 1), O(i + 1, j + 1), O(i + 1, j)); quad(I(i, j), I(i + 1, j), I(i + 1, j + 1), I(i, j + 1));
+      if (!S(i - 1, j)) quad(I(i, j), I(i, j + 1), O(i, j + 1), O(i, j));
+      if (!S(i + 1, j)) quad(I(i + 1, j + 1), I(i + 1, j), O(i + 1, j), O(i + 1, j + 1));
+      if (!S(i, j - 1)) quad(I(i + 1, j), I(i, j), O(i, j), O(i + 1, j));
+      if (!S(i, j + 1)) quad(I(i, j + 1), I(i + 1, j + 1), O(i + 1, j + 1), O(i, j + 1));
+    }
+    return { V: pos, F: new Uint32Array(F) };
+  }
+  /* contorno de la placa plantar (talón en +x, alineado con la parte posterior de la férula) */
+  function footOutline(prof, p, inset) {
+    var pl = p.plate, r1 = pl.w1 / 2 - inset, r2 = pl.w2 / 2 - inset, xh = p.p1 * prof.a[0] + p.e / 2 - pl.w1 / 2, xt = xh - (pl.l - pl.w1 / 2 - pl.w2 / 2), pts = [];
+    for (var k = 0; k <= 20; k++) { var al = -Math.PI / 2 + Math.PI * k / 20; pts.push([xh + r1 * Math.cos(al), r1 * Math.sin(al)]); }
+    for (k = 0; k <= 20; k++) { al = Math.PI / 2 + Math.PI * k / 20; pts.push([xt + r2 * Math.cos(al), r2 * Math.sin(al)]); }
+    return pts;
+  }
+  /* sólido extruido: contorno plano (x, y) entre z0 y z1(x) */
+  function extrude(pts, z0, z1f) {
+    var n = pts.length, V = new Float32Array((2 * n + 2) * 3), F = [], cx = 0, cy = 0;
+    pts.forEach(function (q) { cx += q[0] / n; cy += q[1] / n; });
+    pts.forEach(function (q, i) { V.set([q[0], q[1], z0], 3 * i); V.set([q[0], q[1], z1f(q[0])], 3 * (n + i)); });
+    V.set([cx, cy, z0], 6 * n); V.set([cx, cy, z1f(cx)], 6 * n + 3);
+    for (var i = 0; i < n; i++) { var j = (i + 1) % n; F.push(i, j, n + j, i, n + j, n + i, 2 * n, j, i, 2 * n + 1, n + i, n + j); }
+    return { V: V, F: new Uint32Array(F) };
+  }
+  function plateMesh(prof, p) { return extrude(footOutline(prof, p, 0), -p.e, function () { return 0; }); }
+
+  /* maniquí: elipses con el ancho y el grosor medidos, prolongado hacia el final del tramo */
+  function ghostMeshes(meas, p, zone) {
+    var out = [], L = meas.L, ext = zone.ghost || 0, NT = 48, N = 40, zs = [];
+    var kn = [0, 0.5, 1], A = meas.T.map(function (t) { return p.p1 * t / 2 - 0.6; }), B = meas.W.map(function (w) { return p.p2 * w / 2 - 0.6; });
+    for (var i = 0; i <= N; i++) zs.push((L + ext) * i / N);
+    var V = new Float32Array(zs.length * NT * 3), F = [];
+    zs.forEach(function (z, i) {
+      var u = Math.min(1, z / L), ag = interp(kn, A, u), bg = interp(kn, B, u), xc = 0;
+      if (zone.fingers && z > L) { var t = (z - L) / ext; xc = ag - 9; ag = 9; bg = bg * (0.92 - 0.1 * t); }
+      for (var j = 0; j < NT; j++) { var th = 2 * Math.PI * j / NT; V.set([xc + ag * Math.cos(th), bg * Math.sin(th), z], 3 * (i * NT + j)); }
+    });
+    for (i = 0; i < zs.length - 1; i++) for (var j = 0; j < NT; j++) { var j2 = (j + 1) % NT, a0 = i * NT + j, a1 = i * NT + j2, b0 = (i + 1) * NT + j, b1 = (i + 1) * NT + j2; F.push(a0, b0, b1, a0, b1, a1); }
+    out.push({ V: V, F: new Uint32Array(F) });
+    return out;
+  }
+  function footGhost(prof, p) {
+    var pts = footOutline(prof, p, 4), xs = pts.map(function (q) { return q[0]; }), xmax = Math.max.apply(null, xs), xmin = Math.min.apply(null, xs);
+    return extrude(pts, 0.5, function (x) { var s = (xmax - x) / (xmax - xmin); return 62 - 40 * Math.pow(s, 0.8); });
+  }
+  function midGrid(prof, p, nu, nt) {
+    var g = []; for (var i = 0; i <= nu; i++) { var row = []; for (var j = 0; j <= nt; j++) row.push(surfPoint(prof, p, i / nu, -p.phiDeg / 2 + p.phiDeg * j / nt, 0)); g.push(row); } return g;
+  }
+  function bbox(meshes) {
+    var mn = [Infinity, Infinity, Infinity], mx = [-Infinity, -Infinity, -Infinity];
+    meshes.forEach(function (m) { for (var i = 0; i < m.V.length; i += 3) for (var d = 0; d < 3; d++) { var x = m.V[i + d]; if (x < mn[d]) mn[d] = x; if (x > mx[d]) mx[d] = x; } });
+    return { min: mn, max: mx, size: [mx[0] - mn[0], mx[1] - mn[1], mx[2] - mn[2]] };
+  }
+  function fitsBed(size, bed) {
+    var s = size.slice().sort(function (a, b) { return a - b; }), b = bed.slice().sort(function (a, b) { return a - b; });
+    return s[0] <= b[0] && s[1] <= b[1] && s[2] <= b[2];
+  }
+
+  var api = { DEG: DEG, ZONES: ZONES, zoneDefaults: zoneDefaults, sectionsFrom: sectionsFrom, measErrors: measErrors, footGhost: footGhost, buildProfile: buildProfile, interp: interp, perfLayout: perfLayout, plateArea: plateArea,
+    areaRect: areaRect, evaluate: evaluate, material: material, surfPoint: surfPoint, tubeMesh: tubeMesh, plateMesh: plateMesh, ghostMeshes: ghostMeshes, midGrid: midGrid, bbox: bbox, fitsBed: fitsBed };
+  if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.R3D = api;
+})(this);
+
+</script>
+<script>
+/* RESPONDE 3D · interfaz de la herramienta */
+(function () {
+  'use strict';
+  var R = window.R3D, DEG = Math.PI / 180;
+  function $(s, el) { return (el || document).querySelector(s); }
+  function $$(s, el) { return Array.prototype.slice.call((el || document).querySelectorAll(s)); }
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function clone(o) { return JSON.parse(JSON.stringify(o)); }
+  function num(v) { if (v === '' || v == null) return NaN; return parseFloat(String(v).replace(',', '.')); }
+  function nf(x, d) {
+    if (x == null || !isFinite(x)) return '—';
+    var s = Math.abs(x).toFixed(d), p = s.split('.'), g = p[0].replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+    return (x < 0 && Number(s) !== 0 ? '−' : '') + g + (p[1] ? '.' + p[1] : '');
+  }
+  function sg(x, d) { return (x > 0 ? '+' : '') + nf(x, d); }
+  function ic(id) { return '<svg class="ic"><use href="#' + id + '"/></svg>'; }
+  function pill(k, t) { return '<span class="pill ' + k + '">' + ic(k === 'ok' ? 'check' : k === 'err' ? 'x' : 'alert') + esc(t) + '</span>'; }
+  function debounce(fn, ms) { var t; return function () { clearTimeout(t); t = setTimeout(fn, ms); }; }
+  var tt; function toast(m, ms) { var t = $('#toast'); t.textContent = m; t.hidden = false; clearTimeout(tt); tt = setTimeout(function () { t.hidden = true; }, ms || 3500); }
+
+  /* ---------------- estado ---------------- */
+  var MATS = { PLA: 1.24, PETG: 1.27, ABS: 1.04, TPU: 1.21 };
+  var VARS = {
+    phiDeg: { h: 'φ', name: 'Cobertura alrededor del segmento', unit: '°', step: 1, dec: 0 },
+    e: { h: 'e', name: 'Espesor de la pared', unit: 'mm', step: 0.05, dec: 2 },
+    p1: { h: 'p<sub>1</sub>', name: 'Escala del grosor', unit: '', step: 0.005, dec: 3 },
+    p2: { h: 'p<sub>2</sub>', name: 'Escala del ancho', unit: '', step: 0.005, dec: 3 },
+    q: { h: 'q', name: 'Fracción perforada', unit: '', step: 0.005, dec: 3 }
+  };
+  var ZONE_ORDER = ['brazo', 'antebrazo', 'mano', 'rodilla', 'pierna', 'tobillo'];
+  function defaults() { return { v: 4, zone: 'antebrazo', ws: {}, mat: { material: 'PLA', rho: 1.24, dfil: 1.75, spool: 1000, price: '' }, bed: [220, 220, 250], team: '' }; }
+  var KEY = 'responde3d.v4', S = null;
+  try { S = JSON.parse(localStorage.getItem(KEY) || 'null'); if (!S || S.v !== 4) S = null; } catch (e) { S = null; }
+  if (!S) S = defaults();
+  function W() { if (!S.ws[S.zone]) S.ws[S.zone] = R.zoneDefaults(S.zone); return S.ws[S.zone]; }
+  function Z() { return R.ZONES[S.zone]; }
+  var persist = debounce(function () { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }, 400);
+  function persistNow() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+  window.addEventListener('pagehide', persistNow);
+  document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'hidden') persistNow(); });
+  function matP() { return { rho: +S.mat.rho, dfil: +S.mat.dfil, spool: +S.mat.spool, price: num(S.mat.price) }; }
+
+  /* ---------------- zonas ---------------- */
+  $('#zones').innerHTML = ZONE_ORDER.map(function (id) { return '<button class="zone" type="button" data-z="' + id + '"><span class="dot"></span>' + R.ZONES[id].name + '</button>'; }).join('');
+  $('#zones').addEventListener('click', function (ev) { var b = ev.target.closest('[data-z]'); if (!b || b.dataset.z === S.zone) return; S.zone = b.dataset.z; persist(); loadZone(); });
+  function renderZoneInfo() {
+    var z = Z(), w = W();
+    $$('.zone').forEach(function (b) { b.classList.toggle('on', b.dataset.z === S.zone); });
+    $('#zinfo').innerHTML = '<span>Tramo: <b>' + z.pts[0] + ' → ' + z.pts[2] + '</b></span><span>Componentes: <b>' + z.comp + '</b></span><span>Férula por el lado <b>' + z.side + '</b></span><span>Medidas: <b>' + (w.example ? 'ejemplo sintético' : 'del equipo') + '</b></span>';
+  }
+
+  /* ---------------- medidas ---------------- */
+  function syncMeas() {
+    var w = W(), z = Z(), m = w.meas;
+    [0, 1, 2].forEach(function (i) {
+      var lab = (['Inicio', 'Mitad', 'Final'])[i] + ': ' + z.pts[i];
+      $('#lw' + i).textContent = lab; $('#lt' + i).textContent = lab;
+      if (document.activeElement !== $('#ms-W' + i)) $('#ms-W' + i).value = m.W[i];
+      if (document.activeElement !== $('#ms-T' + i)) $('#ms-T' + i).value = m.T[i];
+    });
+    if (document.activeElement !== $('#ms-L')) $('#ms-L').value = m.L;
+    $('#help-L').textContent = 'Mida a lo largo del segmento, desde «' + z.pts[0] + '» hasta «' + z.pts[2] + '». La mitad del tramo queda a ' + nf(m.L / 2, 0) + ' mm del inicio.';
+    $('#foot-fields').hidden = !w.prm.plate;
+    if (w.prm.plate) ['l', 'w1', 'w2'].forEach(function (k) { if (document.activeElement !== $('#pl-' + k)) $('#pl-' + k).value = w.prm.plate[k]; });
+  }
+  $('#ms-L').addEventListener('input', function () { var v = num(this.value); W().meas.L = isFinite(v) ? v : NaN; W().example = false; changed(); });
+  [0, 1, 2].forEach(function (i) {
+    $('#ms-W' + i).addEventListener('input', function () { var v = num(this.value); W().meas.W[i] = isFinite(v) ? v : NaN; W().example = false; changed(); });
+    $('#ms-T' + i).addEventListener('input', function () { var v = num(this.value); W().meas.T[i] = isFinite(v) ? v : NaN; W().example = false; changed(); });
+  });
+  ['l', 'w1', 'w2'].forEach(function (k) { $('#pl-' + k).addEventListener('input', function () { var v = num(this.value); if (W().prm.plate) { W().prm.plate[k] = isFinite(v) ? v : NaN; W().example = false; changed(); } }); });
+  $('#b-reset').addEventListener('click', function () {
+    var d = R.zoneDefaults(S.zone), w = W(); w.meas = d.meas; w.prm.plate = d.prm.plate; w.example = true;
+    syncMeas(); changed(); toast('Medidas de ejemplo restablecidas.');
+  });
+
+  /* guía: dibujo con las medidas actuales */
+  function renderGuide() {
+    var z = Z(), m = W().meas, pl = W().prm.plate;
+    var ok = m.L > 0 && m.W.every(function (x) { return x > 0; }) && m.T.every(function (x) { return x > 0; });
+    var txt = '<div><span class="nb">1</span><p><b>Largo:</b> campo "Largo del tramo". Mida en línea recta de un extremo al otro: de «' + z.pts[0] + '» a «' + z.pts[2] + '».</p></div>' +
+      '<div><span class="nb">2</span><p><b>Ancho:</b> de lado a lado en tres puntos: «' + z.pts[0] + '», la mitad del largo («' + z.pts[1] + '») y «' + z.pts[2] + '».</p></div>' +
+      '<div><span class="nb">3</span><p><b>Grosor:</b> de adelante hacia atrás en los mismos tres puntos (vista desde arriba).</p></div>' +
+      (pl ? '<div><span class="nb">4</span><p><b>Pie:</b> largo del talón a la punta, ancho del talón y ancho del antepié.</p></div>' : '') +
+      '<p class="help" style="margin:0">Use medidas del maniquí o de un caso simulado; el dibujo solo explica dónde medir. La férula se apoya sobre esas medidas.</p>';
+    $('#guide-txt').innerHTML = txt;
+    if (!ok) { $('#guide-fig').innerHTML = '<p class="note" style="padding:12px">Complete las medidas para ver el dibujo.</p>'; return; }
+    var VW = 300, VH = 352, cx = pl ? 160 : 108, top = 26, bot = pl ? 226 : 214, maxW = Math.max.apply(null, m.W);
+    var s = Math.min((bot - top) / m.L, 118 / maxW), h = m.L * s, yb = (top + bot) / 2 + h / 2, yt = yb - h, ym = (yb + yt) / 2;
+    var hw = m.W.map(function (x) { return x * s / 2; });
+    var path = 'M' + (cx - hw[0]) + ' ' + yb + ' Q' + (cx - hw[1] - (hw[1] - (hw[0] + hw[2]) / 2) * 0.6) + ' ' + ym + ' ' + (cx - hw[2]) + ' ' + yt + ' L' + (cx + hw[2]) + ' ' + yt + ' Q' + (cx + hw[1] + (hw[1] - (hw[0] + hw[2]) / 2) * 0.6) + ' ' + ym + ' ' + (cx + hw[0]) + ' ' + yb + ' Z';
+    var g = '<svg viewBox="0 0 ' + VW + ' ' + VH + '" role="img" aria-label="Dónde tomar cada medida">';
+    g += '<defs><marker id="ga" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#10313a"/></marker></defs>';
+    if (pl) {   // pie de perfil, hacia la izquierda
+      var fl = Math.min(cx + m.W[0] * s / 2 - 14, pl.l * s), fy = yb + 4;
+      g += '<rect x="' + (cx + hw[0] - fl) + '" y="' + fy + '" width="' + fl + '" height="16" rx="8" fill="#d9eef0" stroke="#3d8f98" stroke-width="1.5"/>';
+      g += '<line x1="' + (cx + hw[0] - fl) + '" y1="' + (fy + 28) + '" x2="' + (cx + hw[0]) + '" y2="' + (fy + 28) + '" stroke="#10313a" stroke-width="1.6" marker-start="url(#ga)" marker-end="url(#ga)"/>';
+      g += badge(cx + hw[0] - fl / 2, fy + 40, 4);
+    }
+    g += '<path d="' + path + '" fill="#d9eef0" stroke="#3d8f98" stroke-width="1.8"/>';
+    var xa = cx - Math.max.apply(null, hw) - 16;
+    g += '<line x1="' + xa + '" y1="' + yb + '" x2="' + xa + '" y2="' + yt + '" stroke="#10313a" stroke-width="1.6" marker-start="url(#ga)" marker-end="url(#ga)"/>' + badge(xa - 12, ym, 1);
+    [[yb - 8, 0], [ym, 1], [yt + 8, 2]].forEach(function (r) {
+      var y = r[0], w2 = hw[r[1]] * (r[1] === 1 ? 1.02 : 0.97);
+      g += '<line x1="' + (cx - w2 + 2) + '" y1="' + y + '" x2="' + (cx + w2 - 2) + '" y2="' + y + '" stroke="#10313a" stroke-width="1.4" marker-start="url(#ga)" marker-end="url(#ga)"/>';
+      g += '<text x="' + (cx + hw[r[1]] + 7) + '" y="' + (y + 4) + '">' + esc(z.pts[r[1]]) + '</text>';
+    });
+    g += badge(cx, ym - 13, 2);
+    // vista desde arriba (grosor) en la mitad
+    var ex = pl ? 50 : 232, ey = pl ? 92 : 266, sc = Math.min((pl ? 32 : 44) / (m.W[1] / 2), (pl ? 24 : 28) / (m.T[1] / 2)), rx = m.W[1] / 2 * sc, ry = m.T[1] / 2 * sc;
+    g += '<ellipse cx="' + ex + '" cy="' + ey + '" rx="' + rx + '" ry="' + ry + '" fill="#d9eef0" stroke="#3d8f98" stroke-width="1.5"/>';
+    g += '<line x1="' + ex + '" y1="' + (ey + ry - 2) + '" x2="' + ex + '" y2="' + (ey - ry + 2) + '" stroke="#10313a" stroke-width="1.4" marker-start="url(#ga)" marker-end="url(#ga)"/>' + badge(pl ? ex : ex - rx - 12, pl ? ey - ry - 13 : ey, 3);
+    g += '<text x="' + ex + '" y="' + (ey + ry + 14) + '" text-anchor="middle" style="fill:#5f6f7a">vista</text><text x="' + ex + '" y="' + (ey + ry + 27) + '" text-anchor="middle" style="fill:#5f6f7a">desde arriba</text>';
+    g += '<text x="' + (VW / 2) + '" y="' + (VH - 8) + '" text-anchor="middle" style="fill:#5f6f7a;font-style:italic">Ancho y grosor rectos, no contorno</text></svg>';
+    $('#guide-fig').innerHTML = g;
+  }
+  function badge(x, y, n) { return '<circle cx="' + x + '" cy="' + y + '" r="9" fill="#10313a"/><text x="' + x + '" y="' + (y + 4) + '" text-anchor="middle" style="fill:#fff;font-weight:700">' + n + '</text>'; }
+
+  /* ---------------- parámetros ---------------- */
+  function rowHTML(k) {
+    var v = VARS[k];
+    return '<div class="prm" data-k="' + k + '"><div class="nm"><i class="v">' + v.h + '</i><span>' + v.name + '</span></div>' +
+      '<input type="range" id="sl-' + k + '" step="' + v.step + '" aria-label="' + v.name + '">' +
+      '<div class="val"><input type="number" id="nb-' + k + '" step="' + v.step + '" aria-label="' + v.name + '"><small>' + v.unit + '</small></div>' +
+      '<div class="meta"><span id="mt-' + k + '"></span><span class="rng">rango <input type="number" id="rn-' + k + '" step="' + v.step + '" aria-label="mínimo"> a <input type="number" id="rx-' + k + '" step="' + v.step + '" aria-label="máximo"></span><span id="ow-' + k + '"></span></div></div>';
+  }
+  $('#prm-list').innerHTML = ['phiDeg', 'e', 'p1', 'p2'].map(rowHTML).join('');
+  $('#prm-q').innerHTML = rowHTML('q');
+  function getP(k) { return k === 'q' ? W().prm.qManual : W().prm[k]; }
+  function setP(k, v) { if (k === 'q') W().prm.qManual = v; else W().prm[k] = v; }
+  Object.keys(VARS).forEach(function (k) {
+    var sl = $('#sl-' + k), nb = $('#nb-' + k);
+    sl.addEventListener('input', function () { setP(k, +sl.value); nb.value = (+sl.value).toFixed(VARS[k].dec); changed(); });
+    nb.addEventListener('input', function () { var v = num(nb.value); if (isFinite(v)) { setP(k, v); sl.value = v; changed(); } });
+    $('#rn-' + k).addEventListener('input', function () { var v = num(this.value); if (isFinite(v)) { W().ranges[k][0] = v; syncInputs(); changed(); } });
+    $('#rx-' + k).addEventListener('input', function () { var v = num(this.value); if (isFinite(v)) { W().ranges[k][1] = v; syncInputs(); changed(); } });
+  });
+  $('#c-ranges').addEventListener('change', function () { ['#card-params', '#card-perf'].forEach(function (id) { $(id).classList.toggle('ranges', $('#c-ranges').checked); }); });
+  $('#seg-q').addEventListener('click', function (ev) { var b = ev.target.closest('button'); if (!b) return; W().prm.qMode = b.dataset.v; syncInputs(); changed(); });
+  var PF = { nf: 'nf', nc: 'nc', sz: 'sz', dth: 'dthDeg', mz: 'mz', mth: 'mthDeg' };
+  Object.keys(PF).forEach(function (id) { $('#pf-' + id).addEventListener('input', function () { var v = num(this.value); if (isFinite(v)) { W().prm.perf[PF[id]] = v; changed(); } }); });
+  $('#c-perf').addEventListener('change', function () { W().prm.perf.on = this.checked; changed(); });
+  $('#m-mat').addEventListener('change', function () { S.mat.material = this.value; if (MATS[this.value]) S.mat.rho = MATS[this.value]; syncInputs(); changed(); });
+  $('#m-rho').addEventListener('input', function () { var v = num(this.value); if (v > 0) { S.mat.rho = v; if (MATS[S.mat.material] !== v) { S.mat.material = 'Otro'; $('#m-mat').value = 'Otro'; } changed(); } });
+  [['#m-d', 'dfil'], ['#m-spool', 'spool']].forEach(function (a) { $(a[0]).addEventListener('input', function () { var v = num(this.value); if (v > 0) { S.mat[a[1]] = v; changed(); } }); });
+  $('#m-price').addEventListener('input', function () { S.mat.price = this.value; changed(); });
+  ['#m-bx', '#m-by', '#m-bz'].forEach(function (id, i) { $(id).addEventListener('input', function () { var v = num(this.value); if (v > 0) { S.bed[i] = v; changed(); } }); });
+  ['team', 'nombre', 'autor', 'enlace', 'licencia'].forEach(function (k) {
+    $('#s-' + k).addEventListener('input', function () { if (k === 'team') { S.team = this.value; renderTeam(); } else W().source[k] = this.value; persist(); });
+  });
+  function renderTeam() { $('#team-chip').textContent = 'Equipo: ' + (S.team.trim() || 'sin nombre'); }
+  function syncInputs() {
+    var w = W(), p = w.prm;
+    Object.keys(VARS).forEach(function (k) {
+      var sl = $('#sl-' + k), nb = $('#nb-' + k), r = w.ranges[k], val = getP(k);
+      sl.min = r[0]; sl.max = r[1]; sl.value = val;
+      if (document.activeElement !== nb) nb.value = (+val).toFixed(VARS[k].dec);
+      if (document.activeElement !== $('#rn-' + k)) $('#rn-' + k).value = r[0];
+      if (document.activeElement !== $('#rx-' + k)) $('#rx-' + k).value = r[1];
+    });
+    $$('#seg-q button').forEach(function (b) { b.classList.toggle('on', b.dataset.v === p.qMode); });
+    $('#perf-box').hidden = p.qMode !== 'perf'; $('#qman-box').hidden = p.qMode !== 'manual';
+    Object.keys(PF).forEach(function (id) { var el = $('#pf-' + id); if (document.activeElement !== el) el.value = p.perf[PF[id]]; });
+    $('#c-perf').checked = !!p.perf.on;
+    $('#m-mat').value = S.mat.material; if (document.activeElement !== $('#m-rho')) $('#m-rho').value = S.mat.rho;
+    $('#m-d').value = S.mat.dfil; $('#m-spool').value = S.mat.spool; if (document.activeElement !== $('#m-price')) $('#m-price').value = S.mat.price;
+    ['#m-bx', '#m-by', '#m-bz'].forEach(function (id, i) { if (document.activeElement !== $(id)) $(id).value = S.bed[i]; });
+    $('#s-team').value = S.team; ['nombre', 'autor', 'enlace', 'licencia'].forEach(function (k) { if (document.activeElement !== $('#s-' + k)) $('#s-' + k).value = w.source[k] || ''; });
+  }
+
+  /* ---------------- cálculo ---------------- */
+  var cur = { prof: null, p: null, ev: null };
+  function profileFor(meas, e) { return R.buildProfile(R.sectionsFrom(meas, e)); }
+  function changed() { persist(); compute(); meshLater(); }
+  var meshLater = debounce(function () { pushViewer(); }, 90);
+  function compute() {
+    var w = W(), z = Z(), errs = R.measErrors(w.meas), msg = '';
+    if (w.prm.plate) { var pa = R.plateArea(w.prm.plate); if (!(w.prm.plate.l > 0 && w.prm.plate.w1 > 0 && w.prm.plate.w2 > 0)) errs.push('Complete las medidas del pie.'); else if (!pa.ok) errs.push('El largo del pie debe ser mayor que el promedio de los dos anchos.'); }
+    if (w.example) msg += '<div class="msg warn">' + ic('alert') + '<span><b>Medidas de ejemplo:</b> son sintéticas, con proporciones aproximadas de ' + z.name.toLowerCase() + '. Reemplácelas por las del maniquí o del modelo digital.</span></div>';
+    if (errs.length) msg += '<div class="msg err">' + ic('x') + '<div><b>Revise las medidas</b><ul>' + errs.map(function (e) { return '<li>' + esc(e) + '</li>'; }).join('') + '</ul></div></div>';
+    $('#meas-msg').innerHTML = msg;
+    renderZoneInfo(); renderGuide();
+    if (errs.length) { cur.ev = null; renderMaterial(); return; }
+    cur.p = clone(w.prm); cur.p.L = w.meas.L;
+    cur.prof = profileFor(w.meas, cur.p.e);
+    cur.ev = R.evaluate(cur.prof, cur.p, matP(), z.split);
+    renderMeta(); renderPerf(); renderMaterial(); renderSens();
+  }
+  function renderMeta() {
+    var p = cur.p, m = W().meas;
+    $('#mt-phiDeg').textContent = '= ' + (p.phiDeg * DEG).toFixed(3) + ' rad · 180° es media vuelta; 270°, tres cuartos de vuelta';
+    $('#mt-e').textContent = '';
+    $('#mt-p1').textContent = 'grosor máximo de la férula ' + nf(p.p1 * (Math.max.apply(null, m.T) + p.e), 1) + ' mm';
+    $('#mt-p2').textContent = 'ancho máximo de la férula ' + nf(p.p2 * (Math.max.apply(null, m.W) + p.e), 1) + ' mm';
+    ['phiDeg', 'e', 'p1', 'p2'].concat(p.qMode === 'manual' ? ['q'] : []).forEach(function (k) {
+      var r = W().ranges[k], v = getP(k), out = v < r[0] - 1e-9 || v > r[1] + 1e-9;
+      $('#ow-' + k).innerHTML = out ? pill('warn', 'fuera del rango') : ''; $('#nb-' + k).classList.toggle('out', out);
+    });
+    $('#mat-note').innerHTML = (MATS[S.mat.material] ? 'ρ = ' + MATS[S.mat.material] + ' g/cm³ es un valor de referencia para ' + S.mat.material + '; puede cambiar según el filamento. ' : '') + 'La cama de ' + S.bed.join(' × ') + ' mm es un ejemplo: escriba la de la impresora del laboratorio.';
+  }
+  function renderPerf() {
+    var p = cur.p, lay = cur.ev.layout;
+    if (p.qMode !== 'perf') { $('#perf-msg').innerHTML = ''; return; }
+    if (!p.perf.on) { $('#perf-info').textContent = 'Sin ventanas: q = 0.'; $('#perf-msg').innerHTML = ''; return; }
+    if (lay.errors.length) { $('#perf-info').textContent = ''; $('#perf-msg').innerHTML = '<div class="msg err">' + ic('x') + '<div><b>Revise las ventanas (se calcula con q = 0)</b><ul>' + lay.errors.map(function (e) { return '<li>' + esc(e) + '</li>'; }).join('') + '</ul></div></div>'; return; }
+    $('#perf-info').innerHTML = (p.perf.nf * p.perf.nc) + ' ventanas · área retirada <b class="num">' + nf(cur.ev.Ah, 0) + ' mm²</b> · q = <b class="num">' + cur.ev.q.toFixed(4) + '</b> · separación entre ventanas: ' + nf(lay.bridgeZ, 1) + ' mm a lo largo y ' + nf(lay.bridgeT, 1) + '° alrededor';
+    $('#perf-msg').innerHTML = lay.bridgeZ < 3 ? '<div class="msg warn">' + ic('alert') + '<span>La separación entre ventanas es menor de 3 mm: revise en el laminador que se imprima bien.</span></div>' : '';
+  }
+  function renderMaterial() {
+    var ev = cur.ev;
+    if (!ev) { ['#t-m', '#t-len', '#t-spool', '#t-cost'].forEach(function (id) { $(id).textContent = '—'; }); $('#det-t tbody').innerHTML = ''; return; }
+    var mt = ev.mat, p = cur.p;
+    $('#t-m').innerHTML = nf(mt.m, 1) + '<small>g</small>';
+    $('#t-len').innerHTML = nf(mt.len, 1) + '<small>m</small>';
+    $('#t-spool').innerHTML = nf(mt.spool, 1) + '<small>%</small>';
+    $('#t-cost').innerHTML = isFinite(mt.cost) ? '$' + nf(mt.cost, 0) + '<small>COP</small>' : '<small style="margin:0">escriba el precio</small>';
+    var rows = [];
+    if (ev.parts.length > 1) ev.parts.forEach(function (pt) { rows.push([pt.name + ': A = ' + nf(pt.A, 0) + ' mm²', nf(pt.V / 1000, 2) + ' cm³']); });
+    rows.push(['Área de la superficie, A', nf(ev.At, 1) + ' mm²'], ['Área de las ventanas', nf(ev.Ah, 1) + ' mm²'], ['Fracción perforada, q', ev.q.toFixed(4)], ['Volumen de la superficie, e(1 − q)A', nf(ev.Vt / 1000, 2) + ' cm³']);
+    if (p.plate) rows.push(['Área de la placa plantar', nf(ev.Ap, 1) + ' mm²'], ['Volumen de la placa, e·A', nf(ev.Vp / 1000, 2) + ' cm³']);
+    rows.push(['Volumen total, V', nf(ev.V / 1000, 2) + ' cm³ (' + nf(ev.V, 0) + ' mm³)'], ['Masa, m = ρV/1000', nf(mt.m, 2) + ' g con ρ = ' + S.mat.rho + ' g/cm³']);
+    $('#det-t tbody').innerHTML = rows.map(function (r, i) { return '<tr' + (i >= rows.length - 2 ? ' style="font-weight:600"' : '') + '><td>' + r[0] + '</td><td>' + r[1] + '</td></tr>'; }).join('');
+    $('#mat-sub').textContent = Z().name + ' · configuración actual';
+  }
+  function renderSens() {
+    var w = W(), base = cur.ev.V, keys = ['e', 'L', 'p1', 'p2', 'phiDeg'].concat(w.prm.plate ? ['l', 'w1', 'w2'] : []), rows = [];
+    var names = { e: ['e', 'espesor'], L: ['L', 'largo del tramo'], p1: ['p<sub>1</sub>', 'escala del grosor'], p2: ['p<sub>2</sub>', 'escala del ancho'], phiDeg: ['φ', 'cobertura'], l: ['ℓ', 'largo del pie'], w1: ['w<sub>1</sub>', 'ancho del talón'], w2: ['w<sub>2</sub>', 'ancho del antepié'] };
+    keys.forEach(function (k) {
+      var p = clone(cur.p), meas = clone(w.meas); p.qMode = 'manual'; p.qManual = cur.ev.q;
+      if (k === 'L') { meas.L *= 1.05; p.L = meas.L; } else if (k === 'l' || k === 'w1' || k === 'w2') p.plate[k] *= 1.05; else p[k] *= 1.05;
+      var V = R.evaluate(profileFor(meas, p.e), p).V;
+      rows.push({ k: k, d: (V - base) / base * 100 });
+    });
+    var mx = Math.max.apply(null, rows.map(function (r) { return Math.abs(r.d); })) || 1;
+    $('#sens').innerHTML = rows.map(function (r) {
+      return '<div class="bar"><span><i class="v">' + names[r.k][0] + '</i> <span class="note">' + names[r.k][1] + '</span></span><span class="tr"><span class="fl' + (r.d < 0 ? ' neg' : '') + '" style="width:' + (Math.abs(r.d) / mx * 100).toFixed(1) + '%"></span></span><span class="vv">' + sg(r.d, 2) + ' %</span></div>';
+    }).join('');
+  }
+
+  /* ---------------- visor 3D ---------------- */
+  var lastZoneSent = null;
+  function pushViewer() {
+    if (!cur.ev) return;
+    var p = cur.p, prof = cur.prof, z = Z(), w = W();
+    var meshes = [R.tubeMesh(prof, p)];
+    if (p.plate) meshes.push(R.plateMesh(prof, p));
+    var ghosts = R.ghostMeshes(w.meas, p, z);
+    if (z.foot && p.plate) ghosts.push(R.footGhost(prof, p));
+    var bb = R.bbox(meshes), lift = p.e / 2 + 0.35;
+    var secs = prof.knots.map(function (u) { var a = []; for (var j = 0; j <= 64; j++) a.push(R.surfPoint(prof, p, u, -p.phiDeg / 2 + p.phiDeg * j / 64, lift)); return a; });
+    var fits = R.fitsBed(bb.size, S.bed);
+    $('#dims').innerHTML = 'Dimensiones totales: <b class="num">' + bb.size.map(function (x) { return x.toFixed(0); }).join(' × ') + ' mm</b> ' + (fits ? pill('ok', 'cabe en la cama ' + S.bed.join('×')) : pill('err', 'no cabe en la cama ' + S.bed.join('×') + ': dividir la pieza o usar otra impresora'));
+    $('#v-sub').textContent = z.name + ' · ' + z.comp.toLowerCase();
+    var payload = { meshes: meshes, ghosts: ghosts, cuts: [], sections: secs, wire: R.midGrid(prof, p, 24, 32), bed: S.bed.slice(), L: p.L, min: bb.min, max: bb.max, view: z.view, refit: lastZoneSent !== S.zone };
+    lastZoneSent = S.zone;
+    window.__r3d = payload;
+    if (window.R3DViewer) window.R3DViewer.update(payload);
+  }
+  window.addEventListener('r3d:ready', function () { if (window.__r3d) { window.__r3d.refit = true; window.R3DViewer.update(window.__r3d); } });
+  $('#seg-view').addEventListener('click', function (ev) { var b = ev.target.closest('button'); if (!b) return; $$('#seg-view button').forEach(function (x) { x.classList.toggle('on', x === b); }); if (window.R3DViewer) window.R3DViewer.view(b.dataset.v); });
+  ['ghost', 'sec', 'wire', 'axes', 'rot'].forEach(function (k) { $('#v-' + k).addEventListener('change', function () { if (window.R3DViewer) window.R3DViewer.toggle(k, this.checked); }); });
+
+  /* ---------------- Excel ---------------- */
+  var inViewer = !!(window.claude && typeof window.claude.use === 'function'), dlP = null;
+  function getDl() { if (!inViewer) return Promise.resolve(null); if (!dlP) dlP = window.claude.use('downloads').catch(function () { return null; }); return dlP; }
+  getDl();
+  function saveFile(name, data, mime) {
+    if (!inViewer) {
+      var url = URL.createObjectURL(data instanceof Blob ? data : new Blob([data], { type: mime || 'application/octet-stream' })), a = document.createElement('a');
+      a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(function () { URL.revokeObjectURL(url); }, 5000);
+      toast('Descarga iniciada: ' + name); return Promise.resolve();
+    }
+    return getDl().then(function (dl) {
+      if (!dl) { toast('Las descargas no están disponibles en esta vista.'); return; }
+      return dl.save({ filename: name, data: data }).then(function () { toast('Archivo guardado: ' + name); }, function (e) { toast(e && e.code === 'declined' ? 'Descarga cancelada.' : 'No fue posible descargar el archivo.'); });
+    });
+  }
+  function slug(s) { return String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^A-Za-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 30); }
+  var xlP = null;
+  function loadXLSX() {
+    if (window.XLSX) return Promise.resolve(window.XLSX);
+    if (!xlP) xlP = new Promise(function (res, rej) { var s = document.createElement('script'); s.src = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js'; s.onload = function () { res(window.XLSX); }; s.onerror = function () { xlP = null; rej(); }; document.head.appendChild(s); });
+    return xlP;
+  }
+  $('#x-xlsx').addEventListener('click', function () {
+    if (!cur.ev) { toast('Complete las medidas antes de exportar.'); return; }
+    var name = ['RESPONDE3D', slug(S.team), slug(Z().name)].filter(Boolean).join('_');
+    loadXLSX().then(function (XL) { saveFile(name + '.xlsx', new Uint8Array(workbook(XL))); }, function () { toast('Se necesita conexión a internet para generar el Excel.'); });
+  });
+  function workbook(XL) {
+    var wb = XL.utils.book_new(), w = W(), z = Z(), p = cur.p, ev = cur.ev, m = w.meas;
+    function f(x) { return { t: 'n', f: x }; }
+    function add(name, aoa, cols) { var ws = XL.utils.aoa_to_sheet(aoa); ws['!cols'] = cols.map(function (c) { return { wch: c }; }); XL.utils.book_append_sheet(wb, ws, name); }
+    add('Proyecto', [['RESPONDE 3D · herramienta de apoyo'], ['Prototipo académico: no apto para uso clínico ni para colocar en personas.'], [], ['Equipo', S.team], ['Zona', z.name], ['Componentes', z.comp], ['Diseño abierto', w.source.nombre], ['Autor o repositorio', w.source.autor], ['Enlace', w.source.enlace], ['Licencia', w.source.licencia], ['Medidas', w.example ? 'ejemplo sintético' : 'medidas del equipo']], [24, 60]);
+    var med = [['Espesor e (mm)', p.e], [], ['Punto', 'Lugar', 'z (mm)', 'Ancho (mm)', 'Grosor (mm)', 'a = grosor/2 + e/2', 'b = ancho/2 + e/2']];
+    ['Inicio', 'Mitad', 'Final'].forEach(function (n, i) { var k = 4 + i; med.push([n, z.pts[i], m.L * [0, 0.5, 1][i], m.W[i], m.T[i], f('E' + k + '/2+$B$1/2'), f('D' + k + '/2+$B$1/2')]); });
+    if (p.plate) med.push([], ['Pie', 'Largo (mm)', p.plate.l, 'Ancho talón (mm)', p.plate.w1, 'Ancho antepié (mm)', p.plate.w2]);
+    add('Medidas', med, [14, 20, 10, 16, 14, 20, 20]);
+    var res = [['Variable', 'Valor', 'Unidad'], ['Cobertura φ', p.phiDeg, '°'], ['Espesor e', p.e, 'mm'], ['p1 (escala del grosor)', p.p1, ''], ['p2 (escala del ancho)', p.p2, ''], ['Área de la superficie A', +ev.At.toFixed(3), 'mm²'], ['Fracción perforada q', +ev.q.toFixed(6), ''], ['Área de la placa', +ev.Ap.toFixed(3), 'mm²'],
+      ['Volumen V', f('B3*(1-B7)*B6+B3*B8'), 'mm³'], ['Densidad ρ', +S.mat.rho, 'g/cm³'], ['Masa m', f('B10*B9/1000'), 'g'], ['Diámetro del filamento', +S.mat.dfil, 'mm'], ['Longitud de filamento', f('B9/(PI()*(B12/2)^2)/1000'), 'm'], ['Peso del rollo', +S.mat.spool, 'g'], ['Porcentaje del rollo', f('B11/B14*100'), '%'], ['Precio', num(S.mat.price) || '', 'COP/kg'], ['Costo', f('IF(B16>0,B11*B16/1000,"")'), 'COP']];
+    add('Resultados', res, [26, 14, 10]);
+    return XL.write(wb, { bookType: 'xlsx', type: 'array' });
+  }
+
+  /* ---------------- inicio ---------------- */
+  function loadZone() { lastZoneSent = null; renderTeam(); syncMeas(); syncInputs(); compute(); pushViewer(); }
+  loadZone();
+})();
+
+</script>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { toCreasedNormals } from 'three/addons/utils/BufferGeometryUtils.js';
+
+const host = document.getElementById('viewer'), msg = document.getElementById('viewer-msg');
+let renderer;
+try { renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true }); }
+catch (e) { msg.textContent = 'Este navegador no permite gráficos 3D (WebGL). Los cálculos siguen funcionando.'; throw e; }
+renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+host.insertBefore(renderer.domElement, host.firstChild);
+msg.hidden = true;
+document.getElementById('vleg').hidden = false;
+document.getElementById('vhint').hidden = false;
+
+const css = (n, d) => getComputedStyle(document.documentElement).getPropertyValue(n).trim() || d;
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(32, 4 / 3, 1, 10000);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.addEventListener('change', render);
+scene.add(new THREE.HemisphereLight(0xffffff, 0x5a6b78, 1.2));
+const key = new THREE.DirectionalLight(0xffffff, 1.6); key.position.set(-300, 520, 380); scene.add(key);
+const fill = new THREE.DirectionalLight(0xffffff, 0.55); fill.position.set(380, 160, -260); scene.add(fill);
+const root = new THREE.Group(); root.rotation.x = -Math.PI / 2; scene.add(root);   // eje z del modelo hacia arriba
+const solidMat = new THREE.MeshStandardMaterial({ color: css('--mesh', '#3d8f98'), roughness: 0.6, metalness: 0.02, side: THREE.DoubleSide });
+const ghostMat = new THREE.MeshStandardMaterial({ color: 0xb4bec6, roughness: 0.9, transparent: true, opacity: 0.28, depthWrite: false, side: THREE.DoubleSide });
+const secMat = new THREE.LineBasicMaterial({ color: css('--mesh-2', '#ee6a32') });
+const hiMat = new THREE.MeshBasicMaterial({ color: css('--mesh-2', '#ee6a32') });
+const cutMat = new THREE.MeshBasicMaterial({ color: css('--mesh-2', '#ee6a32'), transparent: true, opacity: 0.22, depthWrite: false, side: THREE.DoubleSide });
+const wireMat = new THREE.LineBasicMaterial({ color: 0x1d2b34, transparent: true, opacity: 0.55 });
+const bedMat = new THREE.LineBasicMaterial({ color: 0xb9c6cf });
+let solid = null, ghost = null, secs = null, wire = null, axes = null, bed = null, hi = null, data = null, viewName = 'iso', spin = false, hiIndex = -1;
+const show = { sec: true, wire: false, axes: true, ghost: true };
+
+function drop(o) { if (!o) return; o.traverse((c) => c.geometry && c.geometry.dispose()); root.remove(o); }
+const line = (pts, mat) => new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts.map((p) => new THREE.Vector3(p[0], p[1], p[2]))), mat);
+function meshGroup(list, mat, crease) {
+  const g = new THREE.Group();
+  list.forEach((m) => {
+    let geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(m.V), 3));
+    geo.setIndex(new THREE.BufferAttribute(new Uint32Array(m.F), 1));
+    geo = crease ? toCreasedNormals(geo, Math.PI / 5) : (geo.computeVertexNormals(), geo);
+    g.add(new THREE.Mesh(geo, mat));
+  });
+  return g;
+}
+
+function update(d) {
+  data = d;
+  [solid, ghost, secs, wire, axes, bed].forEach(drop);
+  solid = meshGroup(d.meshes, solidMat, true); root.add(solid);
+  ghost = meshGroup(d.ghosts, ghostMat, false); ghost.renderOrder = 2; root.add(ghost);
+  secs = new THREE.Group(); d.sections.forEach((p) => secs.add(line(p, secMat))); root.add(secs);
+  wire = new THREE.Group();
+  d.wire.forEach((r) => wire.add(line(r, wireMat)));
+  for (let j = 0; j < d.wire[0].length; j++) wire.add(line(d.wire.map((r) => r[j]), wireMat));
+  root.add(wire);
+  const s = Math.max(30, d.L * 0.3);
+  axes = new THREE.Group();
+  [[0xd03b3b, [s, 0, 0]], [0x18884a, [0, s, 0]], [0x2a78d6, [0, 0, s]]].forEach(([c, v]) => axes.add(line([[0, 0, 0], v], new THREE.LineBasicMaterial({ color: c }))));
+  root.add(axes);
+  const cx = (d.min[0] + d.max[0]) / 2, cy = (d.min[1] + d.max[1]) / 2, bx = d.bed[0] / 2, by = d.bed[1] / 2, z0 = d.min[2] - 0.3, P = [];
+  for (let x = -bx; x <= bx + 1e-6; x += 20) P.push(cx + x, cy - by, z0, cx + x, cy + by, z0);
+  for (let y = -by; y <= by + 1e-6; y += 20) P.push(cx - bx, cy + y, z0, cx + bx, cy + y, z0);
+  const bg = new THREE.BufferGeometry(); bg.setAttribute('position', new THREE.Float32BufferAttribute(P, 3));
+  bed = new THREE.LineSegments(bg, bedMat); root.add(bed);
+  root.position.y = -d.min[2];
+  highlight(hiIndex, true);
+  apply();
+  if (d.refit) fit(); else render();
+}
+function highlight(i, quiet) {
+  hiIndex = i; drop(hi); hi = null;
+  if (data && i >= 0 && data.sections[i]) {
+    hi = new THREE.Group();
+    const pts = data.sections[i].map((p) => new THREE.Vector3(p[0], p[1], p[2]));
+    hi.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 96, 1.3, 8, false), hiMat));
+    const el = data.cuts[i], shape = new THREE.Shape(); shape.absellipse(0, 0, el.a, el.b, 0, Math.PI * 2, false, 0);
+    const disk = new THREE.Mesh(new THREE.ShapeGeometry(shape, 48), cutMat); disk.position.z = el.z; disk.renderOrder = 3;
+    hi.add(disk);
+    root.add(hi);
+  }
+  if (!quiet) render();
+}
+function apply() {
+  secs && (secs.visible = show.sec); wire && (wire.visible = show.wire); axes && (axes.visible = show.axes); ghost && (ghost.visible = show.ghost);
+  solidMat.transparent = show.wire; solidMat.opacity = show.wire ? 0.3 : 1; solidMat.depthWrite = !show.wire; solidMat.needsUpdate = true;
+  render();
+}
+function fit() {
+  if (!solid) return;
+  root.updateMatrixWorld(true);
+  const box = new THREE.Box3().setFromObject(solid), c = box.getCenter(new THREE.Vector3()), r = box.getSize(new THREE.Vector3()).length() / 2;
+  const dist = Math.max(r, 160) / Math.sin(THREE.MathUtils.degToRad(camera.fov / 2)) * 1.3;   // escala común: las zonas pequeñas se ven más pequeñas
+  const dirs = { iso: (data && data.view) || [1.1, 0.7, 1.35], top: [0, 1, 0.002], side: [0.02, 0.1, 1] };
+  camera.position.copy(c).addScaledVector(new THREE.Vector3(...dirs[viewName]).normalize(), dist);
+  camera.near = dist / 60; camera.far = dist * 20; camera.updateProjectionMatrix();
+  controls.target.copy(c); controls.update(); render();
+}
+function resize() {
+  const w = host.clientWidth, h = host.clientHeight; if (!w || !h) return;
+  renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); render();
+}
+let raf = 0;
+function render() { if (raf) return; raf = requestAnimationFrame(() => { raf = 0; renderer.render(scene, camera); }); }
+function loop() { if (!spin) return; controls.update(); renderer.render(scene, camera); requestAnimationFrame(loop); }
+new ResizeObserver(resize).observe(host);
+window.R3DViewer = {
+  update, highlight,
+  view(n) { viewName = n; fit(); },
+  toggle(k, on) { if (k === 'rot') { spin = on; controls.autoRotate = on; controls.autoRotateSpeed = 1.6; if (on) loop(); return; } show[k] = on; apply(); },
+  resize() { resize(); }
+};
+resize();
+window.dispatchEvent(new Event('r3d:ready'));
+
+</script>
+</body>
+</html>
